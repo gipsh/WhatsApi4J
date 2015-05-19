@@ -39,6 +39,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import net.sumppen.whatsapi4j.LoadConfigFile;
 import net.sumppen.whatsapi4j.events.Event;
 import net.sumppen.whatsapi4j.events.EventType;
 import net.sumppen.whatsapi4j.message.AudioMessage;
@@ -66,9 +67,9 @@ import org.json.JSONObject;
  *
  */
 public class WhatsApi {
-
-	private static final String RELEASE_TOKEN_CONST = "PdA2DJyKoUrwLw1Bg6EIhzh502dF9noR9uFCllGk1419900749520";
-	private static final String RELEASE_TIME = "1430860548912";
+    
+	private static String RELEASE_TOKEN_CONST = "PdA2DJyKoUrwLw1Bg6EIhzh502dF9noR9uFCllGk1419900749520";
+	private static String RELEASE_TIME = "1430860548912";
 	private final int PORT = 443;                                      // The port of the WhatsApp server.
 	private final int TIMEOUT_SEC = 2;                                  // The timeout for the connection with the WhatsApp servers.
 	private final String WHATSAPP_CHECK_HOST = "v.whatsapp.net/v2/exist";  // The check credentials host.
@@ -111,6 +112,12 @@ public class WhatsApi {
 	private Proxy proxy;
 
 	public WhatsApi(String username, String identity, String nickname) throws NoSuchAlgorithmException, WhatsAppException {
+		
+		LoadConfigFile configFile  = new LoadConfigFile();
+		
+		WhatsApi.RELEASE_TOKEN_CONST = configFile.getValue(LoadConfigFile.RELEASE_TOKEN);
+		WhatsApi.RELEASE_TIME = configFile.getValue(LoadConfigFile.RELEASE_TIME);
+		
 		writer = new BinTreeNodeWriter();
 		reader = new BinTreeNodeReader();
 		this.name = nickname;
